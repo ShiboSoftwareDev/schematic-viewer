@@ -10,11 +10,11 @@ import {
   getStoredString,
   setStoredBoolean,
   setStoredString,
-} from "lib/hooks/useLocalStorage"
-import { useSchematicGroupsOverlay } from "lib/hooks/useSchematicGroupsOverlay"
-import { useSchematicNetHover } from "lib/hooks/useSchematicNetHover"
-import { useSchematicSearch } from "lib/hooks/useSchematicSearch"
-import { enableDebug } from "lib/utils/debug"
+} from "../hooks/useLocalStorage"
+import { useSchematicGroupsOverlay } from "../hooks/useSchematicGroupsOverlay"
+import { useSchematicNetHover } from "../hooks/useSchematicNetHover"
+import { useSchematicSearch } from "../hooks/useSchematicSearch"
+import { enableDebug } from "../utils/debug"
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { toString as transformToString } from "transformation-matrix"
 import { useMouseMatrixTransform } from "use-mouse-matrix-transform"
