@@ -17,3 +17,17 @@ test("renders physical firmware inputs and outputs with power state", () => {
   expect(markup).toContain("Press and hold")
   expect(markup).toContain("LED1 on")
 })
+
+test("keeps physical switches operable without board power", () => {
+  const markup = renderToStaticMarkup(
+    createElement(FirmwareSimulationSchematicViewer, {
+      circuitJson: [],
+      buttons: [{ component_name: "SW1", is_pressed: false }],
+      leds: [],
+      isPowered: false,
+    }),
+  )
+
+  expect(markup).toContain("SW1")
+  expect(markup).not.toContain("disabled")
+})

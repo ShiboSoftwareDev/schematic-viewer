@@ -44,17 +44,14 @@ const benchOverlayStyle: CSSProperties = {
   zIndex: 10,
 }
 
-const buttonStyle = (
-  isPressed: boolean,
-  isPowered: boolean,
-): CSSProperties => ({
+const buttonStyle = (isPressed: boolean): CSSProperties => ({
   minWidth: 112,
   padding: "8px 12px",
   border: `1px solid ${isPressed ? "#2563eb" : "#cbd5e1"}`,
   borderRadius: 8,
   background: isPressed ? "#dbeafe" : "#ffffff",
-  color: isPowered ? "#0f172a" : "#94a3b8",
-  cursor: isPowered ? "pointer" : "not-allowed",
+  color: "#0f172a",
+  cursor: "pointer",
   fontFamily: "inherit",
   textAlign: "left",
   userSelect: "none",
@@ -63,10 +60,8 @@ const buttonStyle = (
 const setFirmwareButtonPressed = (request: {
   componentName: string
   isPressed: boolean
-  isPowered: boolean
   onButtonChange?: FirmwareSimulationSchematicViewerProps["onButtonChange"]
 }) => {
-  if (!request.isPowered) return
   request.onButtonChange?.({
     component_name: request.componentName,
     is_pressed: request.isPressed,
@@ -76,7 +71,6 @@ const setFirmwareButtonPressed = (request: {
 const releaseFirmwareButtonPointer = (request: {
   event: PointerEvent<HTMLButtonElement>
   componentName: string
-  isPowered: boolean
   onButtonChange?: FirmwareSimulationSchematicViewerProps["onButtonChange"]
 }) => {
   if (request.event.currentTarget.hasPointerCapture(request.event.pointerId)) {
@@ -85,7 +79,6 @@ const releaseFirmwareButtonPointer = (request: {
   setFirmwareButtonPressed({
     componentName: request.componentName,
     isPressed: false,
-    isPowered: request.isPowered,
     onButtonChange: request.onButtonChange,
   })
 }
@@ -94,7 +87,6 @@ const changeFirmwareButtonFromKeyboard = (request: {
   event: KeyboardEvent<HTMLButtonElement>
   componentName: string
   isPressed: boolean
-  isPowered: boolean
   onButtonChange?: FirmwareSimulationSchematicViewerProps["onButtonChange"]
 }) => {
   if (request.event.key !== " " && request.event.key !== "Enter") return
@@ -103,28 +95,24 @@ const changeFirmwareButtonFromKeyboard = (request: {
   setFirmwareButtonPressed({
     componentName: request.componentName,
     isPressed: request.isPressed,
-    isPowered: request.isPowered,
     onButtonChange: request.onButtonChange,
   })
 }
 
 const MomentaryFirmwareButton = (request: {
   button: FirmwareSchematicButtonState
-  isPowered: boolean
   onButtonChange?: FirmwareSimulationSchematicViewerProps["onButtonChange"]
 }) => (
   <button
     type="button"
-    disabled={!request.isPowered}
     aria-pressed={request.button.is_pressed}
-    style={buttonStyle(request.button.is_pressed, request.isPowered)}
+    style={buttonStyle(request.button.is_pressed)}
     onPointerDown={(event) => {
       event.preventDefault()
       event.currentTarget.setPointerCapture(event.pointerId)
       setFirmwareButtonPressed({
         componentName: request.button.component_name,
         isPressed: true,
-        isPowered: request.isPowered,
         onButtonChange: request.onButtonChange,
       })
     }}
@@ -132,7 +120,6 @@ const MomentaryFirmwareButton = (request: {
       releaseFirmwareButtonPointer({
         event,
         componentName: request.button.component_name,
-        isPowered: request.isPowered,
         onButtonChange: request.onButtonChange,
       })
     }
@@ -140,7 +127,6 @@ const MomentaryFirmwareButton = (request: {
       releaseFirmwareButtonPointer({
         event,
         componentName: request.button.component_name,
-        isPowered: request.isPowered,
         onButtonChange: request.onButtonChange,
       })
     }
@@ -149,7 +135,6 @@ const MomentaryFirmwareButton = (request: {
         event,
         componentName: request.button.component_name,
         isPressed: true,
-        isPowered: request.isPowered,
         onButtonChange: request.onButtonChange,
       })
     }
@@ -158,7 +143,6 @@ const MomentaryFirmwareButton = (request: {
         event,
         componentName: request.button.component_name,
         isPressed: false,
-        isPowered: request.isPowered,
         onButtonChange: request.onButtonChange,
       })
     }
@@ -166,7 +150,6 @@ const MomentaryFirmwareButton = (request: {
       setFirmwareButtonPressed({
         componentName: request.button.component_name,
         isPressed: false,
-        isPowered: request.isPowered,
         onButtonChange: request.onButtonChange,
       })
     }
@@ -251,7 +234,6 @@ export const FirmwareSimulationSchematicViewer = ({
           <MomentaryFirmwareButton
             key={button.component_name}
             button={button}
-            isPowered={isPowered}
             onButtonChange={onButtonChange}
           />
         ))}
